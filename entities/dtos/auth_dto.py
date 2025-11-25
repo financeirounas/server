@@ -18,3 +18,7 @@ class ResetPasswordCodeDTO(BaseModel):
     token: str = Field(..., description="Token de redefinição de senha")
     password: str = Field(..., min_length=6, description="Nova senha do usuário")
     confirm: str = Field(..., min_length=6, description="Confirmação da nova senha do usuário")
+    
+
+class ValidateTokenDTO(BaseModel):
+    token: str = Field(..., description="Token de autenticação JWT")

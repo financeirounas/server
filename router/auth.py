@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from services.auth_service import AuthService
-from entities.dtos.auth_dto import LoginDTO, ResetPasswordCodeDTO, SendVerifyEmailCodeDTO, VerifyEmailDTO
+from entities.dtos.auth_dto import LoginDTO, ResetPasswordCodeDTO, SendVerifyEmailCodeDTO, ValidateTokenDTO, VerifyEmailDTO
 from services.code_service import CodeService
+from services.jwt_service import JWTService
 
 router = APIRouter()
 
@@ -49,14 +50,19 @@ async def reset_password_code(dto: ResetPasswordCodeDTO):
     if not user_record:
         raise HTTPException(status_code=400, detail="Token de redefinição de senha inválido ou expirado")
     
-    
     if dto.password != dto.confirm:
         raise HTTPException(status_code=400, detail="A senha e a confirmação de senha não coincidem")
     
     await AuthService.change_password(user_record.id, dto.password)
     return {"message": "Senha redefinida com sucesso"}
 
-    
+ 
+@router.post("/validate-token")
+async def validate_token(dto: ValidateTokenDTO):
+    payload = await JWTService.validate_token(dto.token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Token inválido ou expirado")
+    return {"payload": payload}   
 @router.post("/logout")
 async def logout():
     await AuthService.logout()

@@ -24,7 +24,7 @@ class JWTService:
         expire = now + timedelta(minutes=JWTService.ACCESS_TOKEN_EXPIRE_MINUTES)
 
         payload: Dict[str, Any] = {
-            "user_id": user_id,   
+            "sub": user_id,   
             "iat": int(now.timestamp()), 
             "exp": int(expire.timestamp()) 
         }
@@ -62,7 +62,7 @@ class JWTService:
         """
         try:
             payload = await JWTService.validate_token(token)
-            user_id = payload.get("user_id")
+            user_id = payload.get("sub")
             if not isinstance(user_id, str):
                 return None
             return user_id

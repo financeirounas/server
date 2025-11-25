@@ -125,7 +125,6 @@ class AuthService:
             raise HTTPException(status_code=400, detail="Invalid email or password.")
 
         generated_jwt = await JWTService.generate_jwt_token(user_record.id)
-        print(generated_jwt)
         if not generated_jwt:
             raise RuntimeError("Erro ao gerar token JWT.")
         
