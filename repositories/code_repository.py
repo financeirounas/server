@@ -1,4 +1,6 @@
 from typing import Optional, Dict, Any
+
+from fastapi import HTTPException
 from lib.supabase_client import supabase  
 from entities.models.security_code import SecurityCode
 
@@ -31,7 +33,7 @@ class CodeRepository:
         )
 
         if not response.data:
-            raise RuntimeError("Erro ao criar codigo de segurança no Supabase")
+            raise HTTPException(status_code=500, detail="Erro ao criar codigo de segurança no Supabase")
         
         return SecurityCode(**response.data[0])
 
@@ -67,7 +69,7 @@ class CodeRepository:
         )
 
         if not response.data:
-            raise RuntimeError("Erro ao revogar o código de segurança no Supabase")
+            raise HTTPException(status_code=500, detail="Erro ao revogar o código de segurança no Supabase")
     
 
     @staticmethod
@@ -82,7 +84,4 @@ class CodeRepository:
             .eq("type", code_type)
             .execute()
         )
-
-        if not response.data:
-            raise RuntimeError("Erro ao revogar os códigos de segurança no Supabase")
     

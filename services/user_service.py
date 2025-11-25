@@ -1,4 +1,4 @@
-import os
+from fastapi import HTTPException
 from passlib.context import CryptContext
 from entities.models.user import User
 from repositories.user_repository import UserRepository
@@ -22,7 +22,7 @@ class UserService:
 
         existing_user_record = await UserRepository.get_user("email", email)
         if existing_user_record:
-            raise ValueError("User with this email already exists.")
+            raise HTTPException(status_code=400, detail="User with this email already exists.")
 
         hashed_password = UserService.hash_password(password)
 

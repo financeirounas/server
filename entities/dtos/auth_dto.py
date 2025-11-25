@@ -1,3 +1,4 @@
+from click import confirm
 from pydantic import BaseModel, EmailStr, Field
 
 class LoginDTO(BaseModel):
@@ -11,3 +12,9 @@ class VerifyEmailDTO(BaseModel):
     
 class SendVerifyEmailCodeDTO(BaseModel):
     email: EmailStr = Field(..., description="E-mail institucional do usuário")
+    
+    
+class ResetPasswordCodeDTO(BaseModel):
+    token: str = Field(..., description="Token de redefinição de senha")
+    password: str = Field(..., min_length=6, description="Nova senha do usuário")
+    confirm: str = Field(..., min_length=6, description="Confirmação da nova senha do usuário")

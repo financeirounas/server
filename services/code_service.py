@@ -1,6 +1,8 @@
 import random
 import uuid
 
+from fastapi import HTTPException
+
 from entities.models.security_code import SecurityCode
 from repositories.code_repository import CodeRepository
 
@@ -14,8 +16,10 @@ class CodeService:
             return ''.join([str(random.randint(0, 9)) for _ in range(6)])
         elif code_type == "email_verification":
             return f"UNAS_{uuid.uuid4()}"
+        elif code_type == "reset_password_token":
+            return str(uuid.uuid4())
         else:
-            raise ValueError("Tipo de código de segurança inválido.")
+            raise HTTPException(status_code=400, detail="Tipo de código de segurança inválido.")
         
         
     @staticmethod

@@ -6,6 +6,4 @@ load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
-print(f"Connecting to Supabase at {SUPABASE_URL}")
-
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)

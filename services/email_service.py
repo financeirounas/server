@@ -28,6 +28,20 @@ class EmailService:
             subject="Confirme seu e-mail - UNAS",
             html_content=html
         )
+        
+    @staticmethod
+    async def send_email_reset_password(email: str, username: str, code: str) -> None:
+        
+        html = EmailService.render_template("email_reset_password.html", {
+            "code": code,
+            "username": username
+        })
+
+        await EmailService.send_email(
+            to=email,
+            subject="Redefinição de senha - UNAS",
+            html_content=html
+        )
 
     @staticmethod
     async def send_email(to: str, subject: str, html_content: str):

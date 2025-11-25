@@ -1,4 +1,6 @@
 from typing import Optional, Dict, Any
+
+from fastapi import HTTPException
 from lib.supabase_client import supabase  
 from entities.models.user import User
 
@@ -33,7 +35,7 @@ class UserRepository:
         )
 
         if not response.data:
-            raise RuntimeError("Erro ao criar usuário no Supabase")
+            raise HTTPException(status_code=500, detail="Erro ao criar usuário no Supabase")
         
         return User(**response.data[0])
 
@@ -69,4 +71,20 @@ class UserRepository:
         )
         
         if not response.data:
-            raise RuntimeError("Erro ao atualizar email_verified do usuário no Supabase")
+            raise HTTPException(status_code=500, detail="Erro ao atualizar email_verified do usuário no Supabase")
+        
+        
+    @staticmethod
+    async def update_user_password(user_id: str, hashed_password: str) -> None:
+        """
+        Atualiza a senha do usuário.
+        """
+        response = (
+            supabase.table(UserRepository.TABLE_NAME)
+            .update({"password": hashed_password})
+            .eq("id", user_id)
+            .execute()
+        )
+        
+        if not response.data:
+            raise HTTPException(status_code=500, detail="Erro ao atualizar a senha do usuário no Supabase")    

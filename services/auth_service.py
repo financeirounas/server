@@ -1,10 +1,12 @@
 import os
-from entities.dtos.auth_dto import LoginDTO
+from fastapi import HTTPException
+from entities.models.user import User
 from repositories.code_repository import CodeRepository
 from repositories.user_repository import UserRepository
 from services.code_service import CodeService
 from services.code_service import CodeService
 from services.email_service import EmailService
+from services.jwt_service import JWTService
 from services.user_service import UserService
 
 class AuthService:
@@ -60,6 +62,20 @@ class AuthService:
             await UserRepository.update_user_email_verified(user_record.id, True)
             await CodeRepository.mark_code_as_revoked(code_record.id)
             return True
+        
+        
+    @staticmethod
+    async def verify_reset_password_code(code: str) -> User | None:
+        
+        code_record = await CodeService.get_security_code_by_code(code)
+        
+        if not code_record or not (code_record.type == "reset_password" or code_record.type == "reset_password_token") or code_record.revoked:
+            return False
+
+        user_record = await UserRepository.get_user("id", code_record.user_id)
+        if user_record:
+            await CodeRepository.mark_code_as_revoked(code_record.id)
+            return user_record
 
 
     @staticmethod
@@ -77,31 +93,46 @@ class AuthService:
         
         await EmailService.send_email_verification(user_record.email, user_record.username, code.code) 
         return True
+    
+    
+    @staticmethod
+    async def send_reset_password_code(email: str) -> bool:
+        user_record = await UserRepository.get_user("email", email)
+        
+        if not user_record:
+            return False
+        
+        await CodeRepository.revoke_all_codes_for_user(user_record.id, "reset_password")
+        code = await CodeService.create_security_code(user_record.id, "reset_password")
+        
+        if not code:
+            return False
+        
+        await EmailService.send_email_reset_password(user_record.email, user_record.username, code.code) 
+        return True
 
     """
     Função para login de usuário.
     """
     @staticmethod
-    async def login(dto: LoginDTO):
-        if dto.email == "admin@unas.org.br" and dto.password == "123456":
-            return "fake-token-123"
+    async def login(email, password) -> str | None:
+        
+        user_record = await UserRepository.get_user("email", email)
+        if not user_record:
+            raise HTTPException(status_code=400, detail="Invalid email or password.")
+        
+        if not UserService.verify_password(password, user_record.password):
+            raise HTTPException(status_code=400, detail="Invalid email or password.")
 
-        return None
+        generated_jwt = await JWTService.generate_jwt_token(user_record.id)
+        print(generated_jwt)
+        if not generated_jwt:
+            raise RuntimeError("Erro ao gerar token JWT.")
+        
+        return generated_jwt
     
     
-    
-    @staticmethod
-    async def logout():
-        pass
-
-    @staticmethod
-    async def reset_password(email: str):
-        pass
-
-    @staticmethod
-    async def verify_token(code: str):
-        pass
-
     @staticmethod
     async def change_password(user_id: int, new_password: str):
-        pass
+        hashed_password = UserService.hash_password(new_password)
+        await UserRepository.update_user_password(user_id, hashed_password)
