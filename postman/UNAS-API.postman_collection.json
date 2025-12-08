@@ -1,0 +1,790 @@
+{
+    "info": {
+      "name": "UNAS - Backend API",
+      "_postman_id": "f3c9b0c2-0000-0000-0000-unasbackendapi",
+      "description": "Coleção completa para testar a UNAS Finance API (auth, storage, units, orders).",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Infra",
+        "item": [
+          {
+            "name": "Healthcheck (GET /)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/",
+                "host": ["{{base_url}}"],
+                "path": [""]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Auth",
+        "item": [
+          {
+            "name": "Login (POST /auth/login)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"email\": \"admin@unas.org.br\",\n  \"password\": \"123456\"\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/auth/login",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "login"]
+              }
+            }
+          },
+          {
+            "name": "Send Reset Password Code (POST /auth/send-code)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"email\": \"admin@unas.org.br\"\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/auth/send-code",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "send-code"]
+              }
+            }
+          },
+          {
+            "name": "Validate Reset Password Code (POST /auth/validate-code)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"code\": \"INSIRA_O_CODIGO_AQUI\"\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/auth/validate-code",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "validate-code"]
+              }
+            }
+          },
+          {
+            "name": "Verify Email Code (POST /auth/verify-email)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"code\": \"INSIRA_O_CODIGO_AQUI\"\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/auth/verify-email",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "verify-email"]
+              }
+            }
+          },
+          {
+            "name": "Send Verify Email Code (POST /auth/send-code-verify-email)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"email\": \"admin@unas.org.br\"\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/auth/send-code-verify-email",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "send-code-verify-email"]
+              }
+            }
+          },
+          {
+            "name": "Reset Password (POST /auth/reset-password)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"token\": \"INSIRA_O_TOKEN_AQUI\",\n  \"password\": \"nova_senha\",\n  \"confirm\": \"nova_senha\"\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/auth/reset-password",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "reset-password"]
+              }
+            }
+          },
+          {
+            "name": "Validate Token (POST /auth/validate-token)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"token\": \"{{access_token}}\"\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/auth/validate-token",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "validate-token"]
+              }
+            }
+          },
+          {
+            "name": "Logout (POST /auth/logout)",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/auth/logout",
+                "host": ["{{base_url}}"],
+                "path": ["auth", "logout"]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Storage",
+        "item": [
+          {
+            "name": "Listar Estoque (GET /storage?unit_id=)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/storage?unit_id={{unit_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["storage"],
+                "query": [
+                  {
+                    "key": "unit_id",
+                    "value": "{{unit_id}}",
+                    "description": "ID da unidade"
+                  }
+                ]
+              },
+              "description": "Lista todos os itens de estoque de uma unidade"
+            }
+          },
+          {
+            "name": "Registrar Entrada - Comprado",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Arroz integral\",\n    \"amount\": 100.0,\n    \"unit_id\": \"{{unit_id}}\",\n    \"type\": \"comprado\",\n    \"supplier\": \"Distribuidora ABC\",\n    \"invoice\": \"NF-12345\",\n    \"responsible\": \"João Silva\",\n    \"date\": \"2024-01-15\"\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{base_url}}/storage/entry",
+                "host": ["{{base_url}}"],
+                "path": ["storage", "entry"]
+              },
+              "description": "Registra entrada de estoque para item comprado. Se o item já existe, incrementa a quantidade."
+            }
+          },
+          {
+            "name": "Registrar Entrada - Doação",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Feijão preto\",\n    \"amount\": 50.0,\n    \"unit_id\": \"{{unit_id}}\",\n    \"type\": \"doado\",\n    \"supplier\": \"Instituto Alimento\",\n    \"responsible\": \"Maria Santos\",\n    \"date\": \"2024-01-15\"\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{base_url}}/storage/entry",
+                "host": ["{{base_url}}"],
+                "path": ["storage", "entry"]
+              },
+              "description": "Registra entrada de estoque para item doado (sem nota fiscal)."
+            }
+          },
+          {
+            "name": "Registrar Entrada - Novo Item",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Óleo de soja\",\n    \"amount\": 30.0,\n    \"unit_id\": \"{{unit_id}}\",\n    \"type\": \"comprado\",\n    \"supplier\": \"Supermercado XYZ\",\n    \"invoice\": \"NF-67890\",\n    \"responsible\": \"Pedro Costa\",\n    \"date\": \"2024-01-16\"\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{base_url}}/storage/entry",
+                "host": ["{{base_url}}"],
+                "path": ["storage", "entry"]
+              },
+              "description": "Registra entrada de um novo item no estoque (será criado se não existir)."
+            }
+          },
+          {
+            "name": "Registrar Saída - Múltiplos Itens",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"items\": [\n        {\n            \"name\": \"Arroz integral\",\n            \"amount\": 25.0\n        },\n        {\n            \"name\": \"Feijão preto\",\n            \"amount\": 15.0\n        }\n    ],\n    \"purpose\": \"Almoço\",\n    \"responsible\": \"Ana Oliveira\",\n    \"date\": \"2024-01-17\",\n    \"notes\": \"Preparação para almoço do dia 17/01\",\n    \"unit_id\": \"{{unit_id}}\"\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{base_url}}/storage/exit",
+                "host": ["{{base_url}}"],
+                "path": ["storage", "exit"]
+              },
+              "description": "Registra saída de estoque com múltiplos itens. Valida disponibilidade antes de decrementar."
+            }
+          },
+          {
+            "name": "Registrar Saída - Item Único",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"items\": [\n        {\n            \"name\": \"Óleo de soja\",\n            \"amount\": 5.0\n        }\n    ],\n    \"purpose\": \"Café da manhã\",\n    \"responsible\": \"Carlos Mendes\",\n    \"date\": \"2024-01-18\",\n    \"unit_id\": \"{{unit_id}}\"\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{base_url}}/storage/exit",
+                "host": ["{{base_url}}"],
+                "path": ["storage", "exit"]
+              },
+              "description": "Registra saída de estoque com um único item."
+            }
+          },
+          {
+            "name": "Registrar Saída - Erro (Quantidade Insuficiente)",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"items\": [\n        {\n            \"name\": \"Arroz integral\",\n            \"amount\": 1000.0\n        }\n    ],\n    \"purpose\": \"Evento especial\",\n    \"responsible\": \"Teste\",\n    \"date\": \"2024-01-19\",\n    \"unit_id\": \"{{unit_id}}\"\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{base_url}}/storage/exit",
+                "host": ["{{base_url}}"],
+                "path": ["storage", "exit"]
+              },
+              "description": "Testa validação de quantidade insuficiente (deve retornar erro 400)."
+            }
+          }
+        ]
+      },
+      {
+        "name": "Units",
+        "item": [
+          {
+            "name": "Listar unidades (GET /units)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/units",
+                "host": ["{{base_url}}"],
+                "path": ["units"]
+              }
+            }
+          },
+          {
+            "name": "Listar unidades filtrando por tipo (GET /units?type=CCA)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/units?type=CCA",
+                "host": ["{{base_url}}"],
+                "path": ["units"],
+                "query": [
+                  {
+                    "key": "type",
+                    "value": "CCA"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Buscar unidade por ID (GET /units/{unit_id})",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/units/{{unit_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["units", "{{unit_id}}"]
+              }
+            }
+          },
+          {
+            "name": "Criar unidade (POST /units)",
+            "request": {
+              "method": "POST",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"CCA Heliópolis I\",\n  \"address\": \"Rua da Mina, 123 - Heliópolis\",\n  \"type\": \"CCA\"\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/units",
+                "host": ["{{base_url}}"],
+                "path": ["units"]
+              }
+            }
+          },
+          {
+            "name": "Atualizar unidade (PUT /units/{unit_id})",
+            "request": {
+              "method": "PUT",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"CCA Heliópolis I - Atualizado\"\n}"
+              },
+              "url": {
+                "raw": "{{base_url}}/units/{{unit_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["units", "{{unit_id}}"]
+              }
+            }
+          },
+          {
+            "name": "Deletar unidade (DELETE /units/{unit_id})",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/units/{{unit_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["units", "{{unit_id}}"]
+              }
+            }
+          },
+          {
+            "name": "Buscar unidade por nome (GET /units/name/{name})",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/units/name/{{unit_name}}",
+                "host": ["{{base_url}}"],
+                "path": ["units", "name", "{{unit_name}}"]
+              }
+            }
+          },
+          {
+            "name": "Buscar unidade por endereço (GET /units/address/{address})",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/units/address/{{unit_address}}",
+                "host": ["{{base_url}}"],
+                "path": ["units", "address", "{{unit_address}}"]
+              }
+            }
+          },
+          {
+            "name": "Buscar unidades por tipo (GET /units/type/{type})",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/units/type/{{unit_type}}",
+                "host": ["{{base_url}}"],
+                "path": ["units", "type", "{{unit_type}}"]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Orders",
+        "item": [
+          {
+            "name": "Listar pedidos (GET /orders)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/orders",
+                "host": ["{{base_url}}"],
+                "path": ["orders"]
+              },
+              "description": "Lista todos os pedidos"
+            }
+          },
+          {
+            "name": "Listar pedidos filtrado por unidade (GET /orders?unit_id=)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/orders?unit_id={{unit_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["orders"],
+                "query": [
+                  {
+                    "key": "unit_id",
+                    "value": "{{unit_id}}",
+                    "description": "ID da unidade"
+                  }
+                ]
+              },
+              "description": "Lista pedidos filtrados por unidade"
+            }
+          },
+          {
+            "name": "Listar pedidos filtrado por orçamento (GET /orders?budget_id=)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/orders?budget_id={{budget_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["orders"],
+                "query": [
+                  {
+                    "key": "budget_id",
+                    "value": "{{budget_id}}",
+                    "description": "ID do orçamento"
+                  }
+                ]
+              },
+              "description": "Lista pedidos filtrados por orçamento"
+            }
+          },
+          {
+            "name": "Buscar pedido por ID (GET /orders/{order_id})",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/orders/{{order_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["orders", "{{order_id}}"]
+              },
+              "description": "Busca um pedido pelo ID com seus itens"
+            }
+          },
+          {
+            "name": "Criar pedido sem itens (POST /orders)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"description\": \"Pedido mensal de alimentos\",\n  \"amount\": 1500.0,\n  \"unit_id\": \"{{unit_id}}\",\n  \"budget_id\": \"{{budget_id}}\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{base_url}}/orders",
+                "host": ["{{base_url}}"],
+                "path": ["orders"]
+              },
+              "description": "Cria um novo pedido sem itens"
+            }
+          },
+          {
+            "name": "Criar pedido com itens (POST /orders)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"description\": \"Pedido mensal de alimentos\",\n  \"amount\": 1500.0,\n  \"unit_id\": \"{{unit_id}}\",\n  \"budget_id\": \"{{budget_id}}\",\n  \"items\": [\n    {\n      \"description\": \"Arroz integral\",\n      \"amount\": 100.0,\n      \"measure_unit\": \"kg\",\n      \"received\": false\n    },\n    {\n      \"description\": \"Feijão preto\",\n      \"amount\": 50.0,\n      \"measure_unit\": \"kg\",\n      \"received\": false\n    },\n    {\n      \"description\": \"Óleo de soja\",\n      \"amount\": 30.0,\n      \"measure_unit\": \"pacote\",\n      \"received\": true\n    }\n  ]\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{base_url}}/orders",
+                "host": ["{{base_url}}"],
+                "path": ["orders"]
+              },
+              "description": "Cria um novo pedido com itens incluídos"
+            }
+          },
+          {
+            "name": "Atualizar pedido (PUT /orders/{order_id})",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"description\": \"Pedido mensal atualizado\",\n  \"amount\": 2000.0\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{base_url}}/orders/{{order_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["orders", "{{order_id}}"]
+              },
+              "description": "Atualiza os dados de um pedido"
+            }
+          },
+          {
+            "name": "Deletar pedido (DELETE /orders/{order_id})",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/orders/{{order_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["orders", "{{order_id}}"]
+              },
+              "description": "Remove um pedido e todos os seus itens"
+            }
+          },
+          {
+            "name": "Buscar pedidos por unidade (GET /orders/unit/{unit_id})",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/orders/unit/{{unit_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["orders", "unit", "{{unit_id}}"]
+              },
+              "description": "Busca todos os pedidos de uma unidade"
+            }
+          },
+          {
+            "name": "Buscar pedidos por orçamento (GET /orders/budget/{budget_id})",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/orders/budget/{{budget_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["orders", "budget", "{{budget_id}}"]
+              },
+              "description": "Busca todos os pedidos de um orçamento"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Budgets",
+        "item": [
+          {
+            "name": "Listar orçamentos (GET /budgets)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/budgets",
+                "host": ["{{base_url}}"],
+                "path": ["budgets"]
+              },
+              "description": "Lista todos os orçamentos. Pode ser filtrado por initial_date e final_date via query string."
+            }
+          },
+          {
+            "name": "Buscar orçamento por ID (GET /budgets/{budget_id})",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/budgets/{{budget_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["budgets", "{{budget_id}}"]
+              },
+              "description": "Busca um orçamento pelo ID."
+            }
+          },
+          {
+            "name": "Criar orçamento (POST /budgets)",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"description\": \"Orçamento trimestral 2025\",\n  \"initial_date\": \"2025-01-01\",\n  \"final_date\": \"2025-03-31\",\n  \"amount\": 50000.0\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{base_url}}/budgets",
+                "host": ["{{base_url}}"],
+                "path": ["budgets"]
+              },
+              "description": "Cria um novo orçamento."
+            }
+          },
+          {
+            "name": "Atualizar orçamento (PUT /budgets/{budget_id})",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"description\": \"Orçamento trimestral 2025 - Atualizado\",\n  \"amount\": 60000.0\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{base_url}}/budgets/{{budget_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["budgets", "{{budget_id}}"]
+              },
+              "description": "Atualiza os dados de um orçamento."
+            }
+          },
+          {
+            "name": "Deletar orçamento (DELETE /budgets/{budget_id})",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/budgets/{{budget_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["budgets", "{{budget_id}}"]
+              },
+              "description": "Deleta um orçamento (falha se houver pedidos vinculados)."
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "http://localhost:8000"
+      },
+      {
+        "key": "access_token",
+        "value": ""
+      },
+      {
+        "key": "unit_id",
+        "value": "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "key": "unit_name",
+        "value": "CCA Heliópolis I"
+      },
+      {
+        "key": "unit_address",
+        "value": "Rua da Mina, 123 - Heliópolis"
+      },
+      {
+        "key": "unit_type",
+        "value": "CCA"
+      },
+      {
+        "key": "order_id",
+        "value": "00000000-0000-0000-0000-000000000000"
+      },
+      {
+        "key": "budget_id",
+        "value": "00000000-0000-0000-0000-000000000000"
+      }
+    ]
+  }

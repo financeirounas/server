@@ -1,0 +1,247 @@
+{
+	"info": {
+		"_postman_id": "storage-api-collection",
+		"name": "Storage API - Estoque",
+		"description": "Coleção para testar as rotas de estoque (storage) da API UNAS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Listar Estoque",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/storage?unit_id={{unit_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"storage"
+					],
+					"query": [
+						{
+							"key": "unit_id",
+							"value": "{{unit_id}}",
+							"description": "ID da unidade"
+						}
+					]
+				},
+				"description": "Lista todos os itens de estoque de uma unidade"
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Entrada - Comprado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Arroz integral\",\n    \"amount\": 100.0,\n    \"unit_id\": \"{{unit_id}}\",\n    \"type\": \"comprado\",\n    \"supplier\": \"Distribuidora ABC\",\n    \"invoice\": \"NF-12345\",\n    \"responsible\": \"João Silva\",\n    \"date\": \"2024-01-15\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/storage/entry",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"storage",
+						"entry"
+					]
+				},
+				"description": "Registra entrada de estoque para item comprado. Se o item já existe, incrementa a quantidade."
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Entrada - Doação",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Feijão preto\",\n    \"amount\": 50.0,\n    \"unit_id\": \"{{unit_id}}\",\n    \"type\": \"doado\",\n    \"supplier\": \"Instituto Alimento\",\n    \"responsible\": \"Maria Santos\",\n    \"date\": \"2024-01-15\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/storage/entry",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"storage",
+						"entry"
+					]
+				},
+				"description": "Registra entrada de estoque para item doado (sem nota fiscal)"
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Entrada - Novo Item",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Óleo de soja\",\n    \"amount\": 30.0,\n    \"unit_id\": \"{{unit_id}}\",\n    \"type\": \"comprado\",\n    \"supplier\": \"Supermercado XYZ\",\n    \"invoice\": \"NF-67890\",\n    \"responsible\": \"Pedro Costa\",\n    \"date\": \"2024-01-16\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/storage/entry",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"storage",
+						"entry"
+					]
+				},
+				"description": "Registra entrada de um novo item no estoque (será criado se não existir)"
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Saída - Múltiplos Itens",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": [\n        {\n            \"name\": \"Arroz integral\",\n            \"amount\": 25.0\n        },\n        {\n            \"name\": \"Feijão preto\",\n            \"amount\": 15.0\n        }\n    ],\n    \"purpose\": \"Almoço\",\n    \"responsible\": \"Ana Oliveira\",\n    \"date\": \"2024-01-17\",\n    \"notes\": \"Preparação para almoço do dia 17/01\",\n    \"unit_id\": \"{{unit_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/storage/exit",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"storage",
+						"exit"
+					]
+				},
+				"description": "Registra saída de estoque com múltiplos itens. Valida disponibilidade antes de decrementar."
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Saída - Item Único",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": [\n        {\n            \"name\": \"Óleo de soja\",\n            \"amount\": 5.0\n        }\n    ],\n    \"purpose\": \"Café da manhã\",\n    \"responsible\": \"Carlos Mendes\",\n    \"date\": \"2024-01-18\",\n    \"unit_id\": \"{{unit_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/storage/exit",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"storage",
+						"exit"
+					]
+				},
+				"description": "Registra saída de estoque com um único item"
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Saída - Erro (Quantidade Insuficiente)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": [\n        {\n            \"name\": \"Arroz integral\",\n            \"amount\": 1000.0\n        }\n    ],\n    \"purpose\": \"Evento especial\",\n    \"responsible\": \"Teste\",\n    \"date\": \"2024-01-19\",\n    \"unit_id\": \"{{unit_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/storage/exit",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"storage",
+						"exit"
+					]
+				},
+				"description": "Testa validação de quantidade insuficiente (deve retornar erro 400)"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "unit_id",
+			"value": "00000000-0000-0000-0000-000000000000",
+			"type": "string",
+			"description": "Substitua pelo ID real de uma unidade do banco de dados"
+		}
+	]
+}
+
