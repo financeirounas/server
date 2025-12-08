@@ -286,7 +286,8 @@ class ReportsService:
                     month_map.setdefault(key, {"budget": 0.0, "spent": 0.0})
                     month_map[key]["budget"] += float(getattr(b, "amount", 0) or 0)
 
-        all_orders_to_count = orders or []
+        all_orders_to_count = filtered_orders  # usa apenas pedidos do mês filtrado
+
         for o in all_orders_to_count:
             created = getattr(o, "created_at", None)
             created_dt = to_naive_datetime(created)
@@ -327,5 +328,7 @@ class ReportsService:
             recent_orders=order_summaries,
             frequencies=frequency_summaries
         )
+        
+        print(report.metrics)
 
         return report
